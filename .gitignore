@@ -2,7 +2,6 @@
 models/
 Performance Matrics/
 *.pt
-*.pkl
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
