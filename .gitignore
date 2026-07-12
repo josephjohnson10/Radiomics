@@ -1,7 +1,5 @@
 # Large data files — NOT pushed to GitHub
-models/
 Performance Matrics/
-*.pt
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
