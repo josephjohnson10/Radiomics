@@ -1,0 +1,22 @@
+# Large data files — NOT pushed to GitHub
+Nodule_crop/
+models/
+Performance Matrics/
+*.npy
+*.pt
+*.pkl
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# macOS files
+.DS_Store
+
+# WhatsApp images
+WhatsApp*
+
+# Environment
+.env
+venv/
