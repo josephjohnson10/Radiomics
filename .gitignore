@@ -1,8 +1,6 @@
 # Large data files — NOT pushed to GitHub
-Nodule_crop/
 models/
 Performance Matrics/
-*.npy
 *.pt
 *.pkl
 
