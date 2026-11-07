@@ -22,19 +22,31 @@ Evaluated on the full, unfiltered LIDC-IDRI benchmark under patient-level Strati
 
 ## Repository Structure
 ```
-├── Paper_Minor_Revision/               # Minor revision manuscript, response letter, and submission sources
+├── Paper_Minor_Revision/               # Minor revision (Round 2) submission materials & camera-ready sources
 │   ├── Revised_Manuscript.pdf          # Full compiled revised manuscript (14 pages)
 │   ├── Revised_Manuscript.tex          # LaTeX source matching IOP Publishing format
 │   ├── Response_to_Reviewers.pdf       # Compiled point-by-point response to reviewers (7 pages)
 │   ├── Response_to_Reviewers.docx      # Word version of response with official blue-text styling
+│   ├── Response_to_Reviewers.tex       # LaTeX source of response letter
 │   ├── Source_Files.zip                # Complete verified submission package
 │   ├── references.bib                  # BibTeX bibliography
 │   └── iopjournal.cls                  # Official IOP journal LaTeX class
+├── Major_Revision_Archive/             # Historical Major Revision (Round 1) documentation & sources
+│   ├── BPEX-106740_Major_Revision_Manuscript.pdf # Original submitted PDF reviewed by referees
+│   ├── Reviewer_Comments_Major_Revision_Assigned.docx # Round 1 referee reports & tasks
+│   ├── Response_to_Reviewers_Major_Revision.pdf  # Round 1 response letter to IOP
+│   └── Final_Journal_Paper_Major_Revision.tex    # Initial LaTeX source
+├── External_Validation/                # Independent multi-center external validation pipelines
+│   ├── NSCLC_Preprocessing.py          # Preprocessing script for independent external CT cohort
+│   └── NSCLC-Radiomics.ipynb           # External dataset evaluation notebook
 ├── Performance Matrics/                # Visualizations, diagrams, and TreeSHAP explainability plots
 │   ├── SHAP_XGB_Beeswarm.png           # TreeSHAP beeswarm attribution for XGBoost
 │   ├── SHAP_LGB_Beeswarm.png           # TreeSHAP beeswarm attribution for LightGBM
 │   ├── SHAP_XGB_Bar.png                # Top-20 mean |SHAP| feature importance for XGBoost
 │   ├── SHAP_LGB_Bar.png                # Top-20 mean |SHAP| feature importance for LightGBM
+│   ├── Timing_Analysis.png             # End-to-end pipeline latency breakdown diagram
+│   ├── Timing_Analysis.csv             # Numerical latency metrics across stages
+│   ├── Ablation_Study_Results.csv      # Numerical component ablation metrics
 │   ├── ViT_Radiomics_Pipeline.png      # End-to-end multimodal pipeline architecture
 │   ├── Radiomics_Workflow.png          # PyRadiomics quantitative feature extraction workflow
 │   ├── ViT_2.5D_Architecture.png       # 2.5D multi-slice spatial slicing diagram

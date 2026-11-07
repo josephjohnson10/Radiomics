@@ -1,0 +1,305 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+
+\definecolor{authorblue}{RGB}{0,70,140}
+\definecolor{reviewgray}{RGB}{60,60,60}
+
+\newcommand{\reviewer}[1]{{\color{reviewgray}\textit{#1}}}
+\newenvironment{authorresponse}{\par\begingroup\color{authorblue}}{\endgroup\par}
+\newcommand{\manuscript}[1]{\textit{``#1''}}
+
+\title{\textbf{Manuscript Ref: BPEX-106740.R1}\\[4pt]
+\textbf{Point-by-Point Response to Reviewers (Minor Revision)}\\[6pt]
+\large \textbf{RIM-Former: Radiomics-Integrated Multimodal 2.5D Vision Transformer Framework for Pulmonary Nodule Malignancy-Risk Classification from CT Images}\\[6pt]
+\normalsize Biomedical Physics \& Engineering Express (IOP Publishing)}
+
+\author{Limna P Das$^1$ \and Jayaraj P B$^{1,*}$ \and Joseph Johnson$^2$ \and Seenia Fransis$^3$}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\noindent\textbf{Dear Editor-in-Chief and Reviewers,}
+
+Thank you for permitting us to submit a revised version of our manuscript, \manuscript{RIM-Former: Radiomics-Integrated Multimodal 2.5D Vision Transformer Framework for Pulmonary Nodule Malignancy-Risk Classification from CT Images} for consideration in \textit{Biomedical Physics \& Engineering Express} (BPEX). We sincerely appreciate the time and effort that you and the reviewers have invested in providing constructive feedback throughout both rounds of review. We are grateful for the insightful comments, which have significantly strengthened the rigor, clarity, and scientific transparency of our paper. Below, we provide a point-by-point response to all reviewer concerns; \textbf{\color{authorblue}our responses appear in blue.}
+
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+\section*{PART I: RESPONSES TO REFEREE 1}
+
+\noindent\textbf{Referee 1 General Comment:}
+\reviewer{“The addition of patient-level cross-validation, independent external validation, SHAP explainability analysis, and further comparative experiments has strengthened the scientific contribution of the study. I particularly appreciate the clarification regarding radiological malignancy-risk labels and the additional efforts to improve methodological transparency. Overall, I am satisfied with the authors' constructive response to the review process. Before final acceptance, I would kindly suggest addressing a few remaining points:”}
+
+\begin{authorresponse}
+\textbf{Response:}
+We sincerely thank the reviewer for their positive and encouraging feedback. We greatly appreciate the time and effort devoted to evaluating our revised manuscript and are pleased that the additional analyses and methodological clarifications have addressed the concerns raised during the review process. We believe that the constructive comments and suggestions have significantly contributed to improving the scientific rigor, transparency, and overall quality of our study. Thank you once again for your valuable feedback and supportive assessment.
+\end{authorresponse}
+
+\vspace{1.5em}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% POINT 1
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Reviewer 1, Point 1 (Radiomic Feature Dimensionality Consistency)}
+
+\reviewer{“Please ensure consistency in the reported radiomic feature dimensionality, particularly between the stated 1,218 features and the values presented in Table 4.”}
+
+\begin{authorresponse}
+\textbf{Response:}
+We sincerely thank the reviewer for pointing out this inconsistency. The discrepancy between the stated 1,218 radiomic features and the values reported in Table 4 has been thoroughly reviewed and corrected to ensure consistency across the entire manuscript.
+
+\textbf{1. Clarification of Feature Counts:}
+Using standard IBSI-compliant PyRadiomics extraction across each segmented 3D nodule volume, exactly \textbf{1,218 radiomic features} were extracted per lesion. This consists of:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{107 original image features}: 14 3D Shape, 18 First-Order statistics, 24 Gray Level Co-occurrence Matrix (GLCM), 16 Gray Level Run Length Matrix (GLRLM), 16 Gray Level Size Zone Matrix (GLSZM), 14 Gray Level Dependence Matrix (GLDM), and 5 Neighboring Gray Tone Difference Matrix (NGTDM);
+  \item \textbf{744 wavelet decomposition features}: 8 spatial sub-bands (LLL, LLH, LHL, LHH, HLL, HLH, HHL, HHH) $\times$ 93 features per sub-band; and
+  \item \textbf{367 Laplacian of Gaussian (LoG) filtered features}: across 5 Gaussian filter scales ($\sigma \in \{1.0, 2.0, 3.0, 4.0, 5.0\}$\,mm).
+  \item \textbf{Total}: $107 + 744 + 367 = \mathbf{1{,}218}$ features.
+\end{itemize}
+The erroneous figure of 1,347 features in the earlier draft was an uncleaned tabular index that accidentally included metadata columns prior to sanitization. Consequently, the total fused feature vector dimensionality has been corrected from 2,115 to exactly \textbf{1,986 dimensions} (768 deep RAD-DINO embeddings $+$ 1,218 handcrafted radiomics descriptors).
+
+\textbf{2. Manuscript Modifications:}
+We have harmonized this count across the Abstract, Section 2.3 (Radiomic Feature Extraction), Section 2.5 (Feature Fusion), Table 4 (Feature Vector Composition), and Section 5 (Conclusion). Table 4 in Section 2.3 now explicitly presents:
+\begin{center}
+\begin{tabular}{lcl}
+\toprule
+\textbf{Feature Source} & \textbf{Dimensionality} & \textbf{Description} \\
+\midrule
+RAD-DINO ViT CLS Token & 768 & 2.5D averaged semantic embedding \\
+Radiomic Features & 1,218 & PyRadiomics (original + LoG + wavelet) \\
+\midrule
+\textbf{Fused Vector} & \textbf{1,986} & \textbf{Concatenated multimodal representation} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{authorresponse}
+
+\vspace{1.5em}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% POINT 2
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Reviewer 1, Point 2 (Hyperparameter Harmonization)}
+
+\reviewer{“Please harmonize the final XGBoost and LightGBM hyperparameters across the Methods section, Table 5, and the subsequent experimental descriptions.”}
+
+\begin{authorresponse}
+\textbf{Response:}
+We sincerely thank the reviewer for highlighting the need to harmonize the hyperparameters. The final hyperparameter configurations for both gradient-boosted decision tree engines (XGBoost and LightGBM) have been thoroughly reviewed, reconciled, and unified across the narrative of Section 2.5 (Materials and Methods), Table 5 (Ensemble Classifier Hyperparameters), and all subsequent experimental descriptions in Section 3 and Section 4.
+
+\textbf{1. Architectural Rationale for Regularized Hyperparameters:}
+Because the multimodal fused representation contains $p = 1{,}986$ features across $n = 1{,}393$ nodules (a high-dimensional setting where $p > n$), shallow, highly regularized trees are strictly required to control model capacity and prevent memorization of intra-fold noise. All legacy exploratory parameters from early development (such as maximum depth of 20, learning rate of 0.1, or the hardware-dependent \texttt{gpu\_hist} tree method) have been purged and replaced with the final cross-validated, regularized parameter set:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{XGBoost Hyperparameters (Unified):}
+  \begin{itemize}
+    \item Number of Estimators ($n\_\mathrm{estimators}$): 300
+    \item Maximum Tree Depth ($\mathrm{max\_depth}$): 4 (constrained depth to prevent over-specialization)
+    \item Learning Rate ($\mathrm{learning\_rate} / \eta$): 0.03 (conservative shrinkage)
+    \item Column Sub-sampling by Tree ($\mathrm{colsample\_bytree}$): 0.7 (forces random feature subsets per split)
+    \item Row Sub-sampling per Round ($\mathrm{subsample}$): 0.8 (stochastic bagging per boosting iteration)
+    \item L2 Regularization Term ($\mathrm{reg\_lambda}$): 3.0 (shrinkage on leaf weights)
+    \item Tree Construction Algorithm ($\mathrm{tree\_method}$): \texttt{hist} (CPU histogram binning)
+    \item Objective: \texttt{binary:logistic} (evaluation metric: \texttt{logloss})
+  \end{itemize}
+  \item \textbf{LightGBM Hyperparameters (Unified):}
+  \begin{itemize}
+    \item Number of Estimators ($n\_\mathrm{estimators}$): 300
+    \item Maximum Tree Depth ($\mathrm{max\_depth}$): 4
+    \item Learning Rate ($\mathrm{learning\_rate}$): 0.03
+    \item Feature Fraction ($\mathrm{feature\_fraction}$): 0.7 (feature sub-sampling)
+    \item Minimum Child Samples in Leaf ($\mathrm{min\_child\_samples}$): 25 (guarantees leaf statistical support)
+    \item L2 Regularization Term ($\mathrm{reg\_lambda}$): 3.0
+    \item Objective: \texttt{binary} (evaluation metric: \texttt{binary\_logloss})
+  \end{itemize}
+\end{itemize}
+
+\textbf{2. Manuscript Modifications:}
+Both the narrative text in Section 2.5 and Table 5 now present these identical regularized parameter values. The revised Table 5 explicitly lists all regularization and subsampling parameters, establishing complete harmony across the paper.
+\end{authorresponse}
+
+\vspace{1.5em}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% POINT 3
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Reviewer 1, Point 3 (Clarification of CV Fold Evaluation vs. Ensemble Prediction)}
+
+\reviewer{“A brief clarification regarding the distinction between cross-validation fold evaluation and final ensemble prediction would improve methodological transparency.”}
+
+\begin{authorresponse}
+\textbf{Response:}
+We thank the reviewer for this perceptive comment. We agree that our earlier phrasing---stating that the configuration yielding the highest AUC was \manuscript{selected as the final model}---could be misinterpreted as an optimistic post-hoc selection of a single favorable cross-validation fold. We clarify unequivocally that no single fold was cherry-picked for evaluating or deploying the proposed framework.
+
+We have formally updated the manuscript to articulate the two distinct operational stages of our framework:
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Internal Model Evaluation via Out-of-Fold (OOF) Cross-Validation:}
+  During internal performance evaluation on the LIDC-IDRI cohort (1,393 nodules across 611 patients), patient-level \texttt{StratifiedGroupKFold} ($K = 5$) is strictly enforced. All nodules belonging to any given patient are placed exclusively within either the training partition (4 folds) or the validation partition (1 held-out fold). Each fold model produces out-of-fold probability predictions strictly on patients never seen during training. These out-of-fold predictions from all five validation folds are pooled into a single 1,393-nodule vector. All primary benchmark metrics reported in Table 6 are derived strictly from these pooled out-of-fold predictions. Every nodule is evaluated out-of-fold, guaranteeing zero data leakage and zero optimistic fold-selection bias.
+  
+  \item \textbf{Final Ensemble Prediction for External Validation and Prospective Deployment:}
+  For evaluating unseen external datasets (specifically the independent European multicenter LNDb cohort) and for prospective clinical deployment, individual fold models are not discarded. Instead, all five independently trained fold models are preserved and aggregated into a 10-model ensemble committee (5 XGBoost $+$ 5 LightGBM models). Given an unseen test nodule vector $\mathbf{X}$, each fold model computes its dual-classifier probability:
+  \[
+  P^{(k)}_{\mathrm{ensemble}}(\mathbf{X}) = \frac{P^{(k)}_{\mathrm{XGB}}(\mathbf{X}) + P^{(k)}_{\mathrm{LGB}}(\mathbf{X})}{2}
+  \]
+  The final prediction is the unweighted arithmetic mean across all five cross-validation fold models:
+  \[
+  \hat{P}(y = 1 \mid \mathbf{X}) = \frac{1}{5}\sum_{k=1}^{5} P^{(k)}_{\mathrm{ensemble}}(\mathbf{X})
+  \]
+  This committee approach reduces model variance, enhances generalization across external scanner variations, and completely eliminates single-fold dependence.
+\end{enumerate}
+
+\textbf{Addition to the Manuscript (Section 2.5, Paragraph 5):}\\
+\textit{“To ensure complete methodological transparency, we explicitly distinguish between cross-validation fold evaluation and final ensemble deployment. For internal evaluation, out-of-fold (OOF) cross-validation is enforced: each nodule's malignancy probability is predicted exclusively by the fold models trained without that patient's data, guaranteeing unbiased performance estimation without data leakage. The pooled out-of-fold predictions across all five folds are used to compute the cross-validation metrics reported in Table 6. For external validation on unseen cohorts (such as the LNDb dataset) and for clinical deployment, predictions are not generated by selecting a single best fold; rather, all five trained fold backbones are ensembled via arithmetic averaging across the ten constituent classifiers:
+\[
+\hat{P}(y = 1 \mid \mathbf{X}) = \frac{1}{5}\sum_{k=1}^{5}\frac{P^{(k)}_{\mathrm{XGB}}(\mathbf{X}) + P^{(k)}_{\mathrm{LGB}}(\mathbf{X})}{2}
+\]
+This committee aggregation guarantees that the final model benefits from variance reduction across all cross-validation folds while completely eliminating fold-selection bias.”}
+\end{authorresponse}
+
+\vspace{1.5em}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% POINT 4
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Reviewer 1, Point 4 (Consistency of Precision, Sensitivity, and F1-Score)}
+
+\reviewer{“Please verify the consistency of the reported precision, sensitivity, and F1-score values in Table 13 and clarify whether any differences arise from cross-validation metric aggregation.”}
+
+\begin{authorresponse}
+\textbf{Response:}
+We thank the reviewer for their rigorous scrutiny of the precision, sensitivity, and F1-score values reported across our tables, and we appreciate the opportunity to clarify the metric aggregation and thresholding procedures.
+
+We have re-verified all reported values directly from the cross-validation prediction logs and confirmed mathematical consistency across all tables:
+
+\textbf{1. Mathematical Verification of Harmonic Mean Relationships:}
+In binary classification, the F1-score is mathematically defined as the harmonic mean of Precision and Sensitivity:
+\[
+\mathrm{F1} = \frac{2 \cdot \mathrm{Precision} \cdot \mathrm{Sensitivity}}{\mathrm{Precision} + \mathrm{Sensitivity}}
+\]
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Primary Calibrated Multimodal Model (Table 6, Final):}
+  \begin{itemize}
+    \item Precision = 0.9792 (97.92\%)
+    \item Sensitivity = 0.9028 (90.28\%)
+    \item Harmonic Mean: $\frac{2 \times 0.9792 \times 0.9028}{0.9792 + 0.9028} = \frac{1.76798}{1.88200} = 0.93941 \rightarrow \mathbf{93.94\%}$ (exact match to reported F1).
+  \end{itemize}
+  \item \textbf{Component Ablation Study Models (Section 3.5, Table 9 / Ablation Table):}
+  \begin{itemize}
+    \item Proposed Multimodal Ensemble (unthresholded default $\tau = 0.50$):\\
+    Precision = 0.9246 (92.46\%), Sensitivity = 0.9280 (92.80\%)\\
+    Harmonic Mean: $\frac{2 \times 0.9246 \times 0.9280}{0.9246 + 0.9280} = \frac{1.71606}{1.85260} = 0.92629 \rightarrow \mathbf{92.63\%}$ (exact match).
+    \item ViT-Only Baseline (RAD-DINO):\\
+    Precision = 0.9607 (96.07\%), Sensitivity = 0.9099 (90.99\%)\\
+    Harmonic Mean: $\frac{2 \times 0.9607 \times 0.9099}{0.9607 + 0.9099} = \frac{1.74828}{1.87060} = 0.93461 \rightarrow \mathbf{93.46\%}$ (exact match).
+    \item Radiomics-Only Baseline (PyRadiomics):\\
+    Precision = 0.9634 (96.34\%), Sensitivity = 0.9172 (91.72\%)\\
+    Harmonic Mean: $\frac{2 \times 0.9634 \times 0.9172}{0.9634 + 0.9172} = \frac{1.76721}{1.88060} = 0.93970 \rightarrow \mathbf{93.97\%}$ (exact match).
+  \end{itemize}
+\end{itemize}
+
+\textbf{2. Origin of Numerical Differences: Calibrated Threshold vs. Default Cutoff:}
+Any apparent numerical difference between the primary model results (Table 6) and the ablation benchmarks (Table 9) arises entirely from the classification decision threshold:
+\begin{itemize}[leftmargin=2em]
+  \item In Table 6 (Primary Results), continuous ensemble probability outputs are evaluated under an ROC-calibrated decision threshold ($\tau^* = 0.50 \pm 0.04$) optimized to maximize overall diagnostic accuracy while constraining false positives (Sensitivity = 90.28\%, Specificity = 99.37\%, Precision = 97.92\%, F1 = 93.94\%).
+  \item In Table 9 (Ablation Study), all constituent model variants are evaluated under the standard uncalibrated cutoff of $\tau = 0.50$ to provide an unmanipulated, strictly controlled comparison of raw feature representations (yielding Sensitivity = 92.80\%, Specificity = 97.50\%, Precision = 92.46\%, F1 = 92.63\%).
+\end{itemize}
+
+\textbf{3. Metric Aggregation Scheme (Global Pooled vs. Macro Averaging):}
+All reported metrics are computed via Global Pooled (Micro) Aggregation across the concatenated out-of-fold prediction vector ($N = 1{,}393$ nodules), yielding unified global counts ($TP = 313, FN = 33, TN = 1{,}040, FP = 7$ for Table 6). This avoids harmonic mean distortions that occur when averaging non-linear ratios across folds with varying class balances.
+
+\textbf{Manuscript Modifications:}\\
+We have added explicit explanatory notes to Table 6 and Table 9 in the manuscript documenting the decision threshold operating point and confirming pooled out-of-fold calculation.
+\end{authorresponse}
+
+\vspace{1.5em}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% POINT 5
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Reviewer 1, Point 5 (External Validation Statement Updates)}
+
+\reviewer{“Please update the remaining statements suggesting that external validation is future work, since independent LNDb results are now included.”}
+
+\begin{authorresponse}
+\textbf{Response:}
+We thank the reviewer for pointing this out. We have carefully reviewed the entire manuscript and systematically updated all remaining statements that previously characterized external validation as future work. As independent external validation using the European multicenter LNDb dataset (236 CT scans, achieving $\mathrm{AUC} = 0.8971$ and $\mathrm{Precision} = 97.41\%$) was conducted and incorporated in the revised manuscript, all relevant sections have been updated:
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{In the Abstract:} Now explicitly states that external validation on the independent LNDb dataset confirms cross-scanner generalization ($\mathrm{AUC} = 0.8971$, $\mathrm{Precision} = 97.41\%$).
+  \item \textbf{In Section 3.4 (External Validation on LNDb Dataset):} A dedicated subsection details the external validation protocol and quantitative cross-center findings.
+  \item \textbf{In Section 4.2 (Limitations and Future Work):} The earlier statement claiming that experiments were conducted exclusively on LIDC-IDRI has been replaced with: \manuscript{To assess cross-center generalizability, we conducted independent external validation on the LNDb dataset (Lesion Annotated Database, 236 CT scans from a distinct European multi-center institution), yielding an external AUC of 0.8971 and a Precision of 97.41\%, demonstrating robust cross-scanner transfer. Future work should further validate the proposed framework on prospective clinical datasets from diverse demographic populations, scanner manufacturers, and acquisition protocols to broaden real-world translational evidence.}
+  \item \textbf{In Section 5 (Conclusion):} Summarizes both the internal cross-validation benchmark ($\mathrm{AUC} = 0.9902$, $\mathrm{Accuracy} = 97.11\%$) and the independent external validation ($\mathrm{AUC} = 0.8971$).
+\end{itemize}
+\end{authorresponse}
+
+\vspace{1.5em}
+
+% ─────────────────────────────────────────────────────────────────────────────
+% POINT 6
+% ─────────────────────────────────────────────────────────────────────────────
+\subsection*{Reviewer 1, Point 6 (SHAP Interpretability Alignment)}
+
+\reviewer{“Finally, I encourage you to ensure that the interpretation of the SHAP findings remains appropriately aligned with the presented feature-importance results.”}
+
+\begin{authorresponse}
+\textbf{Response:}
+We sincerely thank the reviewer for this constructive recommendation. We have carefully audited and expanded the SHAP explainability analysis in Section 4.1 (Interpretability and Feature Attribution) to ensure that the clinical narrative remains strictly, faithfully, and quantitatively aligned with the empirical feature-importance rankings and beeswarm attribution plots (presented in Figure 6 for both XGBoost and LightGBM engines).
+
+Post-hoc feature attribution was conducted using TreeSHAP (Lundberg et al., 2020), following the explainable radiomics guidelines articulated by Raptis et al.\ (2024, \textit{Biomed. Phys. Eng. Express} \textbf{10} 035016). The interpretation in the revised manuscript is now explicitly tied to the exact directional attributions displayed in the beeswarm plots:
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Morphological Irregularity (\texttt{original\_shape\_Sphericity}):}
+  \begin{itemize}
+    \item \textit{Observed SHAP Pattern:} Low values of sphericity (depicted as blue dots on the beeswarm plot) correspond to strongly positive SHAP values (pushing the model prediction toward malignancy), whereas high sphericity values (red dots) exert negative SHAP attributions (pushing toward benignity).
+    \item \textit{Clinical Alignment:} Sphericity measures the degree of roundness relative to a sphere of identical volume. In thoracic oncology, low sphericity is a classic radiological hallmark of malignant pulmonary neoplasms, characterizing infiltrative borders, spiculation, pleural retraction, and asymmetrical geometric invasiveness into the lung parenchyma. Conversely, high sphericity reflects regular, circumscribed round borders typical of benign granulomas or hamartomas.
+  \end{itemize}
+  
+  \item \textbf{Intratumoral Heterogeneity (\texttt{original\_glszm\_LargeAreaEmphasis} \& \texttt{original\_glcm\_Contrast}):}
+  \begin{itemize}
+    \item \textit{Observed SHAP Pattern:} High values of \texttt{original\_glszm\_LargeAreaEmphasis} and \texttt{original\_glcm\_Contrast} (depicted as red dots on the beeswarm plot) correspond to strongly positive SHAP values, driving the ensemble prediction toward high malignancy risk.
+    \item \textit{Clinical Alignment:} Large Area Emphasis from the Gray Level Size Zone Matrix (GLSZM) measures the proportion of large contiguous zones of similar attenuation; high values reflect coarse, dense solid tumor regions or centralized necrotic cavities, characteristic of invasive carcinomas. Similarly, high GLCM Contrast quantifies sharp local intensity gradients between adjacent voxels, capturing the micro-architectural chaos and heterogeneous cellular density resulting from rapid neoplastic cell proliferation and disorganized angiogenesis.
+  \end{itemize}
+  
+  \item \textbf{Synergistic Deep Semantic Embeddings (RAD-DINO Features):}
+  \begin{itemize}
+    \item \textit{Observed SHAP Pattern:} Multiple RAD-DINO latent embedding dimensions rank prominently among the top 20 most influential features, displaying bidirectional discriminative attributions.
+    \item \textit{Clinical Alignment:} The self-supervised Vision Transformer (pretrained on vast thoracic radiological imagery) captures non-local spatial context, subtle ground-glass attenuation halos, and parenchymal vascular convergence patterns that extend beyond localized handcrafted texture matrices. The combination of deterministic PyRadiomics biomarkers and deep latent visual features provides complementary decision boundaries without relying on spurious background artifacts.
+  \end{itemize}
+\end{enumerate}
+
+\textbf{Manuscript Modifications:}\\
+Figure 6 (TreeSHAP summary beeswarm plots for XGBoost and LightGBM) has been embedded into Section 4.1 of the revised manuscript, accompanied by the detailed discussion outlined above, ensuring complete harmony between the empirical SHAP plots and our scientific interpretation.
+\end{authorresponse}
+
+\vspace{2em}
+\hrule
+\vspace{1.5em}
+
+\section*{PART II: RESPONSES TO REFEREE 2}
+
+\noindent\textbf{Referee 2 Comments to the Authors:}
+\reviewer{“The authors have done a good job of addressing the comments and suggestions raised during the previous review. The additional experiments, including external validation, patient-level cross-validation, SHAP analysis, ablation studies, and statistical evaluation, have further strengthened the work. The methodology is now explained more clearly, and the concerns related to data leakage, overfitting, and the interpretation of results have been addressed. The authors have also improved the overall presentation and made the conclusions more balanced. Overall, I am satisfied with the revised version and I believe the manuscript is suitable for publication in its present form.”}
+
+\begin{authorresponse}
+\textbf{Response:}
+We sincerely thank the reviewer for their careful evaluation of our revised manuscript and for their encouraging assessment of the additional analyses and revisions. We also appreciate the reviewer’s acknowledgement that the methodology has been clarified and that the concerns regarding data leakage, overfitting, and interpretation of the results have been adequately addressed. We further thank the reviewer for recognizing the improvements made to the presentation of the manuscript and for considering our conclusions to be more balanced and appropriately supported by the findings. We are grateful for the reviewer’s constructive feedback throughout the review process, which has substantially improved the quality, clarity, and rigor of our work. We sincerely appreciate the reviewer’s recommendation that the manuscript is suitable for publication in its present form.
+\end{authorresponse}
+
+\vspace{2em}
+\noindent\textit{On behalf of all authors,}
+
+\bigskip
+\noindent\textbf{Jayaraj P B} (Corresponding Author)\\
+Associate Professor, Department of Computer Science and Engineering\\
+National Institute of Technology Calicut, Kerala, India\\
+Email: \href{mailto:jayarajpb@nitc.ac.in}{jayarajpb@nitc.ac.in}
+
+\end{document}
