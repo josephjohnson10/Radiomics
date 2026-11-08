@@ -193,7 +193,7 @@ In binary classification, the F1-score is mathematically defined as the harmonic
     \item Sensitivity = 0.9028 (90.28\%)
     \item Harmonic Mean: $\frac{2 \times 0.9792 \times 0.9028}{0.9792 + 0.9028} = \frac{1.76798}{1.88200} = 0.93941 \rightarrow \mathbf{93.94\%}$ (exact match to reported F1).
   \end{itemize}
-  \item \textbf{Component Ablation Study Models (Section 3.5, Table 9 / Ablation Table):}
+  \item \textbf{Component Ablation Study Models (Section 4.1, Table 13 / Ablation Table):}
   \begin{itemize}
     \item Proposed Multimodal Ensemble (unthresholded default $\tau = 0.50$):\\
     Precision = 0.9246 (92.46\%), Sensitivity = 0.9280 (92.80\%)\\
@@ -204,21 +204,24 @@ In binary classification, the F1-score is mathematically defined as the harmonic
     \item Radiomics-Only Baseline (PyRadiomics):\\
     Precision = 0.9634 (96.34\%), Sensitivity = 0.9172 (91.72\%)\\
     Harmonic Mean: $\frac{2 \times 0.9634 \times 0.9172}{0.9634 + 0.9172} = \frac{1.76721}{1.88060} = 0.93970 \rightarrow \mathbf{93.97\%}$ (exact match).
+    \item CNN-Radiomics Baseline:\\
+    Precision = 0.7280 (72.80\%), Sensitivity = 0.9450 (94.50\%)\\
+    Harmonic Mean: $\frac{2 \times 0.7280 \times 0.9450}{0.7280 + 0.9450} = \frac{1.37592}{1.67300} = 0.82243 \rightarrow \mathbf{82.24\%}$ (exact match).
   \end{itemize}
 \end{itemize}
 
 \textbf{2. Origin of Numerical Differences: Calibrated Threshold vs. Default Cutoff:}
-Any apparent numerical difference between the primary model results (Table 6) and the ablation benchmarks (Table 9) arises entirely from the classification decision threshold:
+Any apparent numerical difference between the primary model results (Table 6) and the ablation benchmarks (Table 13) arises entirely from the classification decision threshold:
 \begin{itemize}[leftmargin=2em]
   \item In Table 6 (Primary Results), continuous ensemble probability outputs are evaluated under an ROC-calibrated decision threshold ($\tau^* = 0.50 \pm 0.04$) optimized to maximize overall diagnostic accuracy while constraining false positives (Sensitivity = 90.28\%, Specificity = 99.37\%, Precision = 97.92\%, F1 = 93.94\%).
-  \item In Table 9 (Ablation Study), all constituent model variants are evaluated under the standard uncalibrated cutoff of $\tau = 0.50$ to provide an unmanipulated, strictly controlled comparison of raw feature representations (yielding Sensitivity = 92.80\%, Specificity = 97.50\%, Precision = 92.46\%, F1 = 92.63\%).
+  \item In Table 13 (Ablation Study), all constituent model variants are evaluated under the standard uncalibrated cutoff of $\tau = 0.50$ to provide an unmanipulated, strictly controlled comparison of raw feature representations (yielding Sensitivity = 92.80\%, Specificity = 97.50\%, Precision = 92.46\%, F1 = 92.63\%).
 \end{itemize}
 
 \textbf{3. Metric Aggregation Scheme (Global Pooled vs. Macro Averaging):}
 All reported metrics are computed via Global Pooled (Micro) Aggregation across the concatenated out-of-fold prediction vector ($N = 1{,}393$ nodules), yielding unified global counts ($TP = 313, FN = 33, TN = 1{,}040, FP = 7$ for Table 6). This avoids harmonic mean distortions that occur when averaging non-linear ratios across folds with varying class balances.
 
 \textbf{Manuscript Modifications:}\\
-We have added explicit explanatory notes to Table 6 and Table 9 in the manuscript documenting the decision threshold operating point and confirming pooled out-of-fold calculation.
+We have added explicit explanatory notes to Table 6 and Table 13 in the manuscript documenting the decision threshold operating point and confirming pooled out-of-fold calculation.
 \end{authorresponse}
 
 \vspace{1.5em}
@@ -235,7 +238,7 @@ We have added explicit explanatory notes to Table 6 and Table 9 in the manuscrip
 We thank the reviewer for pointing this out. We have carefully reviewed the entire manuscript and systematically updated all remaining statements that previously characterized external validation as future work. As independent external validation using the European multicenter LNDb dataset (236 CT scans, achieving $\mathrm{AUC} = 0.8971$ and $\mathrm{Precision} = 97.41\%$) was conducted and incorporated in the revised manuscript, all relevant sections have been updated:
 \begin{itemize}[leftmargin=2em]
   \item \textbf{In the Abstract:} Now explicitly states that external validation on the independent LNDb dataset confirms cross-scanner generalization ($\mathrm{AUC} = 0.8971$, $\mathrm{Precision} = 97.41\%$).
-  \item \textbf{In Section 3.4 (External Validation on LNDb Dataset):} A dedicated subsection details the external validation protocol and quantitative cross-center findings.
+  \item \textbf{In Section 3.3 (External Validation on LNDb Dataset):} A dedicated subsection details the external validation protocol and quantitative cross-center findings.
   \item \textbf{In Section 4.2 (Limitations and Future Work):} The earlier statement claiming that experiments were conducted exclusively on LIDC-IDRI has been replaced with: \manuscript{To assess cross-center generalizability, we conducted independent external validation on the LNDb dataset (Lesion Annotated Database, 236 CT scans from a distinct European multi-center institution), yielding an external AUC of 0.8971 and a Precision of 97.41\%, demonstrating robust cross-scanner transfer. Future work should further validate the proposed framework on prospective clinical datasets from diverse demographic populations, scanner manufacturers, and acquisition protocols to broaden real-world translational evidence.}
   \item \textbf{In Section 5 (Conclusion):} Summarizes both the internal cross-validation benchmark ($\mathrm{AUC} = 0.9902$, $\mathrm{Accuracy} = 97.11\%$) and the independent external validation ($\mathrm{AUC} = 0.8971$).
 \end{itemize}
@@ -252,7 +255,7 @@ We thank the reviewer for pointing this out. We have carefully reviewed the enti
 
 \begin{authorresponse}
 \textbf{Response:}
-We sincerely thank the reviewer for this constructive recommendation. We have carefully audited and expanded the SHAP explainability analysis in Section 4.1 (Interpretability and Feature Attribution) to ensure that the clinical narrative remains strictly, faithfully, and quantitatively aligned with the empirical feature-importance rankings and beeswarm attribution plots (presented in Figure 6 for both XGBoost and LightGBM engines).
+We sincerely thank the reviewer for this constructive recommendation. We have carefully audited and expanded the SHAP explainability analysis in Section 4.1 (Interpretability and Feature Attribution) to ensure that the clinical narrative remains strictly, faithfully, and quantitatively aligned with the empirical feature-importance rankings, beeswarm attribution plots, and mean absolute SHAP importance bar plots (presented in Figures 6--9 for both LightGBM and XGBoost engines).
 
 Post-hoc feature attribution was conducted using TreeSHAP (Lundberg et al., 2020), following the explainable radiomics guidelines articulated by Raptis et al.\ (2024, \textit{Biomed. Phys. Eng. Express} \textbf{10} 035016). The interpretation in the revised manuscript is now explicitly tied to the exact directional attributions displayed in the beeswarm plots:
 \begin{enumerate}[leftmargin=2em]
@@ -276,7 +279,7 @@ Post-hoc feature attribution was conducted using TreeSHAP (Lundberg et al., 2020
 \end{enumerate}
 
 \textbf{Manuscript Modifications:}\\
-Figure 6 (TreeSHAP summary beeswarm plots for XGBoost and LightGBM) has been embedded into Section 4.1 of the revised manuscript, accompanied by the detailed discussion outlined above, ensuring complete harmony between the empirical SHAP plots and our scientific interpretation.
+Figures 6--9 (TreeSHAP summary beeswarm and bar importance plots for LightGBM and XGBoost) have been embedded into Section 4.1 of the revised manuscript, accompanied by the detailed discussion outlined above, ensuring complete harmony between the empirical SHAP plots and our scientific interpretation.
 \end{authorresponse}
 
 \vspace{2em}
