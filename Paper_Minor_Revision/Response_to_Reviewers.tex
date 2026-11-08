@@ -70,7 +70,7 @@ Using standard IBSI-compliant PyRadiomics extraction across each segmented 3D no
 The erroneous figure of 1,347 features in the earlier draft was an uncleaned tabular index that accidentally included metadata columns prior to sanitization. Consequently, the total fused feature vector dimensionality has been corrected from 2,115 to exactly \textbf{1,986 dimensions} (768 deep RAD-DINO embeddings $+$ 1,218 handcrafted radiomics descriptors).
 
 \textbf{2. Manuscript Modifications:}
-We have harmonized this count across the Abstract, Section 2.3 (Radiomic Feature Extraction), Section 2.5 (Feature Fusion), Table 4 (Feature Vector Composition), and Section 5 (Conclusion). Table 4 in Section 2.3 now explicitly presents:
+We have harmonized this count across the Abstract, Section 2.3 (Radiomic Feature Extraction), Section 2.6 (Feature Fusion and Ensemble Classification), Table 4 (Feature Vector Composition), and Section 5 (Conclusion). Table 4 in Section 2.6 now explicitly presents:
 \begin{center}
 \begin{tabular}{lcl}
 \toprule
@@ -96,7 +96,7 @@ Radiomic Features & 1,218 & PyRadiomics (original + LoG + wavelet) \\
 
 \begin{authorresponse}
 \textbf{Response:}
-We sincerely thank the reviewer for highlighting the need to harmonize the hyperparameters. The final hyperparameter configurations for both gradient-boosted decision tree engines (XGBoost and LightGBM) have been thoroughly reviewed, reconciled, and unified across the narrative of Section 2.5 (Materials and Methods), Table 5 (Ensemble Classifier Hyperparameters), and all subsequent experimental descriptions in Section 3 and Section 4.
+We sincerely thank the reviewer for highlighting the need to harmonize the hyperparameters. The final hyperparameter configurations for both gradient-boosted decision tree engines (XGBoost and LightGBM) have been thoroughly reviewed, reconciled, and unified across the narrative of Section 2.6 (Feature Fusion and Ensemble Classification), Table 5 (Ensemble Classifier Hyperparameters), and all subsequent experimental descriptions in Section 3 and Section 4.
 
 \textbf{1. Architectural Rationale for Regularized Hyperparameters:}
 Because the multimodal fused representation contains $p = 1{,}986$ features across $n = 1{,}393$ nodules (a high-dimensional setting where $p > n$), shallow, highly regularized trees are strictly required to control model capacity and prevent memorization of intra-fold noise. All legacy exploratory parameters from early development (such as maximum depth of 20, learning rate of 0.1, or the hardware-dependent \texttt{gpu\_hist} tree method) have been purged and replaced with the final cross-validated, regularized parameter set:
@@ -125,7 +125,7 @@ Because the multimodal fused representation contains $p = 1{,}986$ features acro
 \end{itemize}
 
 \textbf{2. Manuscript Modifications:}
-Both the narrative text in Section 2.5 and Table 5 now present these identical regularized parameter values. The revised Table 5 explicitly lists all regularization and subsampling parameters, establishing complete harmony across the paper.
+Both the narrative text in Section 2.6 and Table 5 now present these identical regularized parameter values. The revised Table 5 explicitly lists all regularization and subsampling parameters, establishing complete harmony across the paper.
 \end{authorresponse}
 
 \vspace{1.5em}
@@ -255,7 +255,7 @@ We thank the reviewer for pointing this out. We have carefully reviewed the enti
 
 \begin{authorresponse}
 \textbf{Response:}
-We sincerely thank the reviewer for this constructive recommendation. We have carefully audited and expanded the SHAP explainability analysis in Section 4.1 (Interpretability and Feature Attribution) to ensure that the clinical narrative remains strictly, faithfully, and quantitatively aligned with the empirical feature-importance rankings, beeswarm attribution plots, and mean absolute SHAP importance bar plots (presented in Figures 6--9 for both LightGBM and XGBoost engines).
+We sincerely thank the reviewer for this constructive recommendation. We have carefully audited and expanded the SHAP explainability analysis in Section 4.3 (SHAP Explainability Analysis and Clinical Translation) to ensure that the clinical narrative remains strictly, faithfully, and quantitatively aligned with the empirical feature-importance rankings, beeswarm attribution plots, and mean absolute SHAP importance bar plots (presented in Figures 6--9 for both LightGBM and XGBoost engines).
 
 Post-hoc feature attribution was conducted using TreeSHAP (Lundberg et al., 2020), following the explainable radiomics guidelines articulated by Raptis et al.\ (2024, \textit{Biomed. Phys. Eng. Express} \textbf{10} 035016). The interpretation in the revised manuscript is now explicitly tied to the exact directional attributions displayed in the beeswarm plots:
 \begin{enumerate}[leftmargin=2em]
@@ -279,7 +279,7 @@ Post-hoc feature attribution was conducted using TreeSHAP (Lundberg et al., 2020
 \end{enumerate}
 
 \textbf{Manuscript Modifications:}\\
-Figures 6--9 (TreeSHAP summary beeswarm and bar importance plots for LightGBM and XGBoost) have been embedded into Section 4.1 of the revised manuscript, accompanied by the detailed discussion outlined above, ensuring complete harmony between the empirical SHAP plots and our scientific interpretation.
+Figures 6--9 (TreeSHAP summary beeswarm and bar importance plots for LightGBM and XGBoost) have been embedded into Section 4.3 of the revised manuscript, accompanied by the detailed discussion outlined above, ensuring complete harmony between the empirical SHAP plots and our scientific interpretation.
 \end{authorresponse}
 
 \vspace{2em}
