@@ -736,6 +736,14 @@ artifacts, as visualized in the SHAP beeswarm and bar importance plots
 \caption{TreeSHAP summary beeswarm plots illustrating the attribution of top predictive features for XGBoost (left) and LightGBM (right). Each dot corresponds to an individual nodule. Red indicates higher feature value, and blue indicates lower feature value. Reduced \texttt{original\_shape\_Sphericity} and elevated gray-level matrix textures (\texttt{glszm\_LargeAreaEmphasis}, \texttt{glcm\_Contrast}) strongly drive positive predictions of malignancy risk.}\label{fig:shap}
 \end{figure}
 
+\begin{figure}[htbp]
+\color{revblue}
+\centering
+\includegraphics[width=0.49\textwidth]{SHAP_XGB_Bar.png}\hfill
+\includegraphics[width=0.49\textwidth]{SHAP_LGB_Bar.png}
+\caption{TreeSHAP mean absolute feature importance bar plots for XGBoost (left) and LightGBM (right). The bar plots rank features by their mean $|\text{SHAP}|$ value across all nodules, confirming that \texttt{original\_shape\_Sphericity}, \texttt{glszm\_LargeAreaEmphasis}, and \texttt{glcm\_Contrast} are the most influential predictors of malignancy risk in both classifiers.}\label{fig:shap_bar}
+\end{figure}
+
 \subsection{\texorpdfstring{{\color{revblue}Limitations and Future Work}}{Limitations and Future Work}}
 
 {\color{revblue}To assess cross-center generalizability, we conducted independent external
